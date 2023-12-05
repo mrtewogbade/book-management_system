@@ -2,6 +2,7 @@
 import express from 'express';
 import sequelize from '../database';
 import User from './user';
+// import { Request, Response } from 'express';
 
 sequelize.sync().then(() => console.log('db is ready'));
 
@@ -35,6 +36,29 @@ app.get('/users', async (req, res) => {
   const users = await User.findAll();
   res.send(users);
 });
+
+app.get('/users/:id', async (res, req) => {
+    const requestedId = req.params.id;
+    const user = await User.findOne({where: {id: requestedId}})
+    res.send(user)
+
+} )
+
+// app.get('/users/:id', async (req: Request, res: Response) => {
+//     try {
+//         const requestedId = req.params.id;
+//         const user = await User.findOne({ where: { id: requestedId } });
+
+//         if (user) {
+//             res.json(user);
+//         } else {
+//             res.status(404).json({ message: 'User not found' });
+//         }
+//     } catch (error) {
+//         console.error('Error fetching user:', error);
+//         res.status(500).json({ message: 'Internal Server Error' });
+//     }
+// });
 
 const port = 8080;
 
